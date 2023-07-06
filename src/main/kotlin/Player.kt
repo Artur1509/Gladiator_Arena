@@ -6,7 +6,7 @@ class Player(name: String, endurance: Int, strength: Int) : GameChar(name, endur
 
     // Spieler Zug
     override fun turn(): String{
-        println("""Attacken:
+        println("""Wähle eine Attacke:
             |1. Hieb
             |2. Schnitt
             |3. Stich

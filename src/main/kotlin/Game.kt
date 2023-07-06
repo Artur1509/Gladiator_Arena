@@ -72,4 +72,89 @@ class Game {
         this.player!!.showStats()
     }
 
+    // Kämpfen
+    fun fight(enemy: GameChar){
+        println("${this.player!!.name} vs. ${enemy.name}")
+
+        do{
+            // Spieler & Gegner wählen ihren Angriff
+            val playerTurn = this.player!!.turn()
+            val playerDamage = this.player!!.damage.random()
+
+            // Schaden den der Angriff bei Erfolg ausgibt
+            val enemyTurn = enemy.turn()
+            val enemyDamage = enemy.damage.random()
+
+            //Kampflogik Hieb(Schere) Schnitt(Stein) Stich(Papier)
+            // Unentschieden
+            if(playerTurn == enemyTurn){
+                println("*Kling*")
+            }
+            //Schnitt(Stein) schlägt Hieb(Schere)
+            if(playerTurn == "hieb" && enemyTurn == "schnitt"){
+                this.player!!.health -= enemyDamage
+                println("${enemy.name} trifft dich mit '$enemyTurn' und verursacht $enemyDamage Schaden.")
+            }
+            if(playerTurn == "schnitt" && enemyTurn == "hieb"){
+                enemy.health -= playerDamage
+                println("Du triffst ${enemy.name} mit '$playerTurn' und verursachst $playerDamage Schaden.")
+            }
+            //Hieb(Schere) schlägt Stich(Papier)
+            if(playerTurn == "hieb" && enemyTurn == "stich"){
+                enemy.health -= playerDamage
+                println("Du triffst ${enemy.name} mit '$playerTurn' und verursachst $playerDamage Schaden.")
+            }
+            if(playerTurn == "stich" && enemyTurn == "hieb"){
+                this.player!!.health -= enemyDamage
+                println("${enemy.name} trifft dich mit '$enemyTurn' und verursacht $enemyDamage Schaden.")
+            }
+            //Stich(Papier) schlägt Schnitt(Stein)
+            if(playerTurn == "stich" && enemyTurn == "schnitt"){
+                enemy.health -= playerDamage
+                println("Du triffst ${enemy.name} mit '$playerTurn' und verursachst $playerDamage Schaden.")
+            }
+            if(playerTurn == "schnitt" && enemyTurn == "stich"){
+                this.player!!.health -= enemyDamage
+                println("${enemy.name} trifft dich mit '$enemyTurn' und verursacht $enemyDamage Schaden.")
+            }
+
+            // Lebenspunkte auf 0 stellen wenn diese kleiner sind als 0
+            if(enemy.health < 0){
+                enemy.health = 0
+            }
+            if(this.player!!.health < 0){
+                this.player!!.health = 0
+            }
+
+            // Anzeige der Lebenspunkte des Spielers & Gegners
+            println("=== ${this.player!!.name} | HP: ${this.player!!.health} ===")
+            println("=== ${enemy.name} | HP: ${enemy.health} ===")
+
+            // Schleife unterbrechen
+            if(this.player!!.health <= 0){
+                break
+            }
+            if(enemy.health <= 0){
+                break
+            }
+
+
+        }while(true)
+
+        // Ergebnis des Kampfes
+        if(this.player!!.health <= 0 && enemy.health <= 0){
+            println("Unentschieden!")
+        }
+        else if(this.player!!.health <= 0){
+            println("Du bist Tot...")
+        }
+        else{
+            println("Du hast gewonnen!")
+            println("Skillpunkte: +1")
+            this.player!!.health = this.player!!.endurance * 10
+            this.player!!.skillPoints++
+            this.levels.remove(enemy)
+        }
+    }
+
 }
