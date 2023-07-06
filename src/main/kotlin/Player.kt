@@ -15,4 +15,21 @@ class Player(name: String, endurance: Int, strength: Int) : GameChar(name, endur
         val input = readln().toInt()
         return this.attackList[input - 1]
     }
+
+    // Spieler Stats anzeigen
+    override fun showStats(){
+        println("""
+            ====== Gladiator Stats ======
+            Name: ${this.name}
+            HP: ${this.health}
+            DMG: ${this.damage.first()} - ${this.damage.last()}
+            
+            Attribute:
+            Ausdauer: ${this.endurance}
+            Stärke: ${this.strength}
+            
+            Skillpunkte: ${this.skillPoints}
+            =============================
+        """.trimIndent())
+    }
 }
