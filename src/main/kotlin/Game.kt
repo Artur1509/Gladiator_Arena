@@ -2,20 +2,20 @@ class Game {
     // Hauptattribute von Game
     var levels: MutableList<GameChar> = mutableListOf()
     var player: Player? = null
+    var playerWins = 0
 
     // Skillpunkte zur einmaligen Vergabe bei der erstellung eines neuen Gladiators.
     var skillPoints = 10
 
-    // Hilfsvariablen zur Spielererstellung
-    var name = ""
-    var endurance = 0
-    var strength = 0
-
     // Spieler erstellen
     fun createPlayer(): Player {
 
+        var name = ""
+        var endurance = 0
+        var strength = 0
+
         println("Gladiator Name:")
-        this.name = readln()
+        name = readln()
 
         while (this.skillPoints > 0) {
             println("Du hast ${this.skillPoints} Skillpunkte die du frei verteilen kannst.")
@@ -23,8 +23,8 @@ class Game {
             println(
                 """
             |===== Attribute =====
-            |1. Ausdauer (${this.endurance})
-            |2. Stärke (${this.strength})
+            |1. Ausdauer (${endurance})
+            |2. Stärke (${strength})
         """.trimMargin()
             )
 
@@ -37,7 +37,7 @@ class Game {
                         if (input1 > this.skillPoints) {
                             throw Exception("Zu wenig Skillpunkte.")
                         } else {
-                            this.endurance += input1
+                            endurance += input1
                             this.skillPoints -= input1
                         }
                     } catch (ex: Exception) {
@@ -53,18 +53,19 @@ class Game {
                         if (input1 > this.skillPoints) {
                             throw Exception("Zu wenig Skillpunkte.")
                         } else {
-                            this.strength += input1
+                            strength += input1
                             this.skillPoints -= input1
                         }
                     } catch (ex: Exception) {
                         println(ex.message)
                     }
                 }
+                else -> println("Ungültige Eingabe.")
             }
         }
-        println("Dein Gladiator wurde erstellt. Viel Glück in der Arena ${this.name}!")
+        println("Dein Gladiator wurde erstellt. Viel Glück in der Arena ${name}!")
         println()
-        return Player(this.name, this.endurance, this.strength)
+        return Player(name, endurance, strength)
     }
 
     // Spieler Stats anzeigen
@@ -76,6 +77,15 @@ class Game {
     fun fight(enemy: GameChar){
         println("${this.player!!.name} vs. ${enemy.name}")
 
+        if(this.playerWins == 5){
+            println("Besiege den Champion ${enemy.name}!")
+        }
+        else{
+            println("Du musst noch ${5 - this.playerWins} Kämpfer besiegen bis du gegen den Champion antreten darfst.")
+        }
+        println()
+
+        // Kampf Loop
         do{
             // Spieler & Gegner wählen ihren Angriff
             val playerTurn = this.player!!.turn()
@@ -154,6 +164,7 @@ class Game {
             this.player!!.health = this.player!!.endurance * 10
             this.player!!.skillPoints++
             this.levels.remove(enemy)
+            this.playerWins++
         }
     }
 

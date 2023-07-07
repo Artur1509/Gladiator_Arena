@@ -12,8 +12,20 @@ class Player(name: String, endurance: Int, strength: Int) : GameChar(name, endur
             |3. Stich
         """.trimMargin())
 
-        val input = readln().toInt()
+        var input: Int
+            try{
+                input = readln().toInt()
+                if (input < 1 || input > 3){
+                    throw Exception("Ungültige Eingabe: Wähle eine Option (1-3)")
+                }
+            }catch(ex: Exception){
+                println(ex.message)
+                input = readln().toInt()
+            }
+
+
         return this.attackList[input - 1]
+
     }
 
     // Spieler Stats anzeigen
