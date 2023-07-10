@@ -1,6 +1,14 @@
 class Game {
     // Hauptattribute von Game
-    var levels: MutableList<GameChar> = mutableListOf()
+    var levels: MutableList<GameChar> = mutableListOf(
+        GameChar("Augustus", 1, 4),
+        GameChar("Magnus", 1, 3),
+        GameChar("Julius", 1, 5 ),
+        GameChar("Asterix", 1, 5),
+        GameChar("Obelix", 1, 5),
+        GameChar("Champion", 1, 5)
+    )
+    // Spieler
     var player: Player? = null
     var playerWins = 0
 
@@ -157,6 +165,8 @@ class Game {
         }
         else if(this.player!!.health <= 0){
             println("Du bist Tot...")
+            println("=== GAME OVER ===")
+            mainLoop = false
         }
         else{
             println("Du hast gewonnen!")
@@ -165,7 +175,52 @@ class Game {
             this.player!!.skillPoints++
             this.levels.remove(enemy)
             this.playerWins++
+
+            // Endgültiger Sieg Bedingung
+            if(this.playerWins == 6){
+                println("Gratulation, du bist der neue Champion der Arena ${this.player!!.name}!")
+                mainLoop = false
+            }
         }
+    }
+
+    fun shop(player: Player) {
+        do {
+            var shopItems = mutableListOf<Item>(
+                Item("Schwert"),
+                Item("Rüstung")
+            )
+            println(
+                """=== Händler ===
+            |Gold: ${this.player!!.gold}
+        """.trimMargin()
+            )
+
+            for (item in shopItems) {
+                println("${shopItems.indexOf(item) + 1}. ${item.name}")
+            }
+            println(
+                """
+            Auswahl:
+            (1 - ${shopItems.size}) Item betrachten
+            (${shopItems.size + 2}) Zurück
+        """.trimIndent()
+            )
+
+            val input = readln().toInt()
+
+            when (input) {
+                shopItems.size + 2 -> break
+
+                else -> {
+                    try{
+                        shopItems[input].showItem()
+                    }catch(ex: Exception){
+                        println("Ungültige eingabe.")
+                    }
+                }
+            }
+        }while(true)
     }
 
 }
