@@ -1,5 +1,5 @@
 fun menu(){
-    val menu = listOf<String>("1. Kämpfen", "2. Trainieren", "3. Attribute", "4. Tutorial", "5. Shop", "6. Spiel beenden")
+    val menu = listOf<String>("1. Kämpfen", "2. Trainieren", "3. Attribute", "4. Tutorial", "5. Shop", "6. Inventar", "7. Spiel beenden")
 
     println("=== Gladiator Arena ===")
     for(i in menu){
@@ -13,7 +13,8 @@ fun menu(){
         "3" -> game.showStats()
         "4" -> println("tutorial")
         "5" -> game.shop(game.player!!)
-        "6" -> mainLoop = false
+        "6" -> game.player!!.showInventory()
+        "7" -> mainLoop = false
         else -> println("Ungültige Eingabe.")
     }
 }
@@ -31,5 +32,6 @@ fun main(){
     }
 }
 
-//TODO: game.Intro, game.Tutorial, Waffen, Mehr Attribute, Items, Shop
+//TODO: Mittwoch: game.Intro, Tutorial, UI verbessern, Gameplay(Items, Gegner etc.)
+//     Donnerstag: Mehr Attribute, Präsentation
 

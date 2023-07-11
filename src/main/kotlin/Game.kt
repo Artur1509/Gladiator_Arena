@@ -83,6 +83,9 @@ class Game {
 
     // Kämpfen
     fun fight(enemy: GameChar){
+        var playerHealth = this.player!!.health
+        var enemyHealth = this.levels.first().health
+
         println("${this.player!!.name} vs. ${enemy.name}")
 
         if(this.playerWins == 5){
@@ -110,49 +113,49 @@ class Game {
             }
             //Schnitt(Stein) schlägt Hieb(Schere)
             if(playerTurn == "hieb" && enemyTurn == "schnitt"){
-                this.player!!.health -= enemyDamage
+                playerHealth -= enemyDamage
                 println("${enemy.name} trifft dich mit '$enemyTurn' und verursacht $enemyDamage Schaden.")
             }
             if(playerTurn == "schnitt" && enemyTurn == "hieb"){
-                enemy.health -= playerDamage
+                enemyHealth -= playerDamage
                 println("Du triffst ${enemy.name} mit '$playerTurn' und verursachst $playerDamage Schaden.")
             }
             //Hieb(Schere) schlägt Stich(Papier)
             if(playerTurn == "hieb" && enemyTurn == "stich"){
-                enemy.health -= playerDamage
+                enemyHealth -= playerDamage
                 println("Du triffst ${enemy.name} mit '$playerTurn' und verursachst $playerDamage Schaden.")
             }
             if(playerTurn == "stich" && enemyTurn == "hieb"){
-                this.player!!.health -= enemyDamage
+                playerHealth -= enemyDamage
                 println("${enemy.name} trifft dich mit '$enemyTurn' und verursacht $enemyDamage Schaden.")
             }
             //Stich(Papier) schlägt Schnitt(Stein)
             if(playerTurn == "stich" && enemyTurn == "schnitt"){
-                enemy.health -= playerDamage
+                enemyHealth -= playerDamage
                 println("Du triffst ${enemy.name} mit '$playerTurn' und verursachst $playerDamage Schaden.")
             }
             if(playerTurn == "schnitt" && enemyTurn == "stich"){
-                this.player!!.health -= enemyDamage
+                playerHealth -= enemyDamage
                 println("${enemy.name} trifft dich mit '$enemyTurn' und verursacht $enemyDamage Schaden.")
             }
 
             // Lebenspunkte auf 0 stellen wenn diese kleiner sind als 0
-            if(enemy.health < 0){
-                enemy.health = 0
+            if(enemyHealth < 0){
+                enemyHealth = 0
             }
-            if(this.player!!.health < 0){
-                this.player!!.health = 0
+            if(playerHealth < 0){
+                playerHealth = 0
             }
 
             // Anzeige der Lebenspunkte des Spielers & Gegners
-            println("=== ${this.player!!.name} | HP: ${this.player!!.health} ===")
-            println("=== ${enemy.name} | HP: ${enemy.health} ===")
+            println("=== ${this.player!!.name} | HP: $playerHealth ===")
+            println("=== ${enemy.name} | HP: $enemyHealth ===")
 
             // Schleife unterbrechen
-            if(this.player!!.health <= 0){
+            if(playerHealth <= 0){
                 break
             }
-            if(enemy.health <= 0){
+            if(enemyHealth <= 0){
                 break
             }
 
@@ -160,10 +163,10 @@ class Game {
         }while(true)
 
         // Ergebnis des Kampfes
-        if(this.player!!.health <= 0 && enemy.health <= 0){
+        if(playerHealth <= 0 && enemyHealth <= 0){
             println("Unentschieden!")
         }
-        else if(this.player!!.health <= 0){
+        else if(playerHealth <= 0){
             println("Du bist Tot...")
             println("=== GAME OVER ===")
             mainLoop = false
@@ -171,8 +174,8 @@ class Game {
         else{
             println("Du hast gewonnen!")
             println("Skillpunkte: +1")
-            this.player!!.health = this.player!!.endurance * 10
             this.player!!.skillPoints++
+            this.player!!.gold += 50
             this.levels.remove(enemy)
             this.playerWins++
 
@@ -184,11 +187,13 @@ class Game {
         }
     }
 
+    // Ingame Händler funktion
     fun shop(player: Player) {
         do {
             var shopItems = mutableListOf<Item>(
-                Item("Schwert"),
-                Item("Rüstung")
+                Weapon("Kurzschwert", 25, 2),
+                Armor("Lederrüstung", 45, 6),
+                Weapon("Langschwert", 25, 5)
             )
             println(
                 """=== Händler ===
@@ -202,7 +207,7 @@ class Game {
             println(
                 """
             Auswahl:
-            (1 - ${shopItems.size}) Item betrachten
+            (1 - ${shopItems.size}) Item kaufen
             (${shopItems.size + 2}) Zurück
         """.trimIndent()
             )
@@ -214,7 +219,8 @@ class Game {
 
                 else -> {
                     try{
-                        shopItems[input].showItem()
+                        shopItems[input - 1].buyItem(this.player!!)
+
                     }catch(ex: Exception){
                         println("Ungültige eingabe.")
                     }

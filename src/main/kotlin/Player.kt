@@ -3,7 +3,15 @@ class Player(name: String, endurance: Int, strength: Int) : GameChar(name, endur
 
     // Skill Punkte die der Spieler bei einem Sieg bekommt.
     var skillPoints = 0
-    var gold = 0
+
+    // Gold für den Händler
+    var gold = 100
+
+    // Spieler Inventar
+    var inventory = mutableListOf<Item>()
+
+    var armor: Item? = null
+    var weapon: Item? = null
 
     // Spieler Zug
     override fun turn(): String{
@@ -36,6 +44,10 @@ class Player(name: String, endurance: Int, strength: Int) : GameChar(name, endur
             Name: ${this.name}
             HP: ${this.health}
             DMG: ${this.damage.first()} - ${this.damage.last()}
+            
+            Ausrüstung:
+            Waffe: ${this.weapon?.name ?: "Leer" }
+            Rüstung: ${this.armor?.name ?: "Leer"}
             
             Attribute:
             Ausdauer: ${this.endurance}
@@ -73,7 +85,12 @@ class Player(name: String, endurance: Int, strength: Int) : GameChar(name, endur
                         } else {
                             this.endurance ++
                             this.skillPoints --
-                            this.health = this.endurance * 10
+                            if(this.armor != null){
+                                this.health = this.endurance * 10 + this.armor!!.value
+                            }
+                            else{
+                                this.health = this.endurance * 10
+                            }
                         }
                     } catch (ex: Exception) {
                         println(ex.message)
@@ -87,7 +104,12 @@ class Player(name: String, endurance: Int, strength: Int) : GameChar(name, endur
                         } else {
                             this.strength ++
                             this.skillPoints --
-                            this.damage = 1..this.strength
+                            if(this.weapon != null) {
+                                this.damage = 1..(this.strength + this.weapon!!.value)
+                            }
+                            else{
+                                this.damage = 1..this.strength
+                            }
                         }
                     } catch (ex: Exception) {
                         println(ex.message)
@@ -99,4 +121,36 @@ class Player(name: String, endurance: Int, strength: Int) : GameChar(name, endur
 
         }while(true)
     }
+
+    fun showInventory() {
+        do {
+            println("=== Inventar ===")
+            for (item in this.inventory) {
+                println("${this.inventory.indexOf(item) + 1}. ${item.name}")
+            }
+            println(
+                """
+            Item ausrüsten (1 - ${this.inventory.size})
+            Zurück (${this.inventory.size + 2}) 
+        """.trimIndent()
+            )
+
+            val input = readln().toInt()
+            when(input){
+                this.inventory.size + 2 -> break
+
+                else -> {
+                    try{
+                        this.inventory[input - 1].equipItem(this)
+
+                    }catch(ex: Exception){
+                        println("Ungültige Eingabe.")
+                    }
+                }
+            }
+
+        }while(true)
+    }
 }
+
+
