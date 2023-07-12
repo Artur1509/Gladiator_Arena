@@ -5,7 +5,7 @@ class Player(name: String, endurance: Int, strength: Int) : GameChar(name, endur
     var skillPoints = 0
 
     // Gold für den Händler
-    var gold = 100
+    var gold = 25
 
     // Spieler Inventar
     var inventory = mutableListOf<Item>()
@@ -15,6 +15,10 @@ class Player(name: String, endurance: Int, strength: Int) : GameChar(name, endur
 
     // Spieler Zug
     override fun turn(): String{
+        repeat(20){
+            println()
+        }
+
         println("""Wähle eine Attacke:
             |1. Hieb
             |2. Schnitt
@@ -40,7 +44,7 @@ class Player(name: String, endurance: Int, strength: Int) : GameChar(name, endur
     // Spieler Stats anzeigen
     override fun showStats(){
         println("""
-            ====== Gladiator Stats ======
+            ====== Deine Attribute ======
             Name: ${this.name}
             HP: ${this.health}
             DMG: ${this.damage.first()} - ${this.damage.last()}
@@ -61,17 +65,22 @@ class Player(name: String, endurance: Int, strength: Int) : GameChar(name, endur
     // Spieler Attribute verbessern
     fun training() {
         do {
+            repeat(20){
+                println()
+            }
+
             println(
                 """=== Training ===
             |Skillpunkte: ${this.skillPoints}
             |
             |HP: ${this.health}
             |DMG: ${this.damage.first()} - ${this.damage.last()}
-            |======================
+            |
             |Attribute: 
             |1. Ausdauer: ${this.endurance}
             |2. Stärke: ${this.strength}
             |3. Zurück
+            |
             |Wähle ein Attribut aus welches du verbessern möchtest.
         """.trimMargin()
             )
@@ -85,6 +94,10 @@ class Player(name: String, endurance: Int, strength: Int) : GameChar(name, endur
                         } else {
                             this.endurance ++
                             this.skillPoints --
+                            println("Deine Ausdauer wurde auf ${this.endurance} erhöht.")
+                            println("Drücke 'Enter' um fortzufahren.")
+                            readln()
+
                             if(this.armor != null){
                                 this.health = this.endurance * 10 + this.armor!!.value
                             }
@@ -94,6 +107,8 @@ class Player(name: String, endurance: Int, strength: Int) : GameChar(name, endur
                         }
                     } catch (ex: Exception) {
                         println(ex.message)
+                        println("Drücke 'Enter' um fortzufahren.")
+                        readln()
                     }
                 }
 
@@ -104,6 +119,10 @@ class Player(name: String, endurance: Int, strength: Int) : GameChar(name, endur
                         } else {
                             this.strength ++
                             this.skillPoints --
+                            println("Deine Stärke wurde auf ${this.strength} erhöht.")
+                            println("Drücke 'Enter' um  fortzufahren.")
+                            readln()
+
                             if(this.weapon != null) {
                                 this.damage = 1..(this.strength + this.weapon!!.value)
                             }
@@ -113,6 +132,8 @@ class Player(name: String, endurance: Int, strength: Int) : GameChar(name, endur
                         }
                     } catch (ex: Exception) {
                         println(ex.message)
+                        println("Drücke 'Enter' um fortzufahren.")
+                        readln()
                     }
                 }
                 "3" -> break
@@ -124,16 +145,24 @@ class Player(name: String, endurance: Int, strength: Int) : GameChar(name, endur
 
     fun showInventory() {
         do {
+            repeat(20){
+                println()
+            }
+
             println("=== Inventar ===")
             for (item in this.inventory) {
-                println("${this.inventory.indexOf(item) + 1}. ${item.name}")
+                println("${this.inventory.indexOf(item) + 1}. ${item.name} | +${item.value} ${item.attributeBonus()}")
             }
-            println(
-                """
-            Item ausrüsten (1 - ${this.inventory.size})
-            Zurück (${this.inventory.size + 2}) 
-        """.trimIndent()
-            )
+            if(this.inventory.size == 0){
+                println("Leer")
+            }
+
+            println()
+
+            println("""Auswahl:
+                |Item ausrüsten (1 - ${this.inventory.size})
+                |Zurück (${this.inventory.size + 2}) 
+            """.trimMargin())
 
             val input = readln().toInt()
             when(input){
@@ -141,16 +170,22 @@ class Player(name: String, endurance: Int, strength: Int) : GameChar(name, endur
 
                 else -> {
                     try{
+                        println("Du hast ${this.inventory[input - 1].name} ausgerüstet.")
                         this.inventory[input - 1].equipItem(this)
+                        println("Drücke 'Enter' um fortzufahren.")
+                        readln()
 
                     }catch(ex: Exception){
                         println("Ungültige Eingabe.")
+                        println("Drücke 'Enter' um fortzufahren.")
+                        readln()
                     }
                 }
             }
 
         }while(true)
     }
+
 }
 
 

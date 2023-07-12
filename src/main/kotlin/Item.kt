@@ -2,6 +2,7 @@ open class Item(var name: String, var price: Int, var value: Int) {
 
     open var isArmor = false
     open var isWeapon = false
+
     open fun equipItem(player: Player){
         if(this.isArmor){
             if(player.armor != null){
@@ -31,5 +32,16 @@ open class Item(var name: String, var price: Int, var value: Int) {
         else{
             println("Nicht genug Gold.")
         }
+    }
+
+    fun attributeBonus(): String{
+        var bonusFor = ""
+        if (this.isArmor){
+            bonusFor = "HP"
+        }
+        if(this.isWeapon){
+            bonusFor = "DMG"
+        }
+        return bonusFor
     }
 }

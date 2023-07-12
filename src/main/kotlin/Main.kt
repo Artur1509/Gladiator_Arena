@@ -1,6 +1,10 @@
 fun menu(){
     val menu = listOf<String>("1. Kämpfen", "2. Trainieren", "3. Attribute", "4. Tutorial", "5. Shop", "6. Inventar", "7. Spiel beenden")
 
+    repeat(20){
+        println()
+    }
+
     println("=== Gladiator Arena ===")
     for(i in menu){
         println(i)
@@ -24,7 +28,7 @@ val game = Game()
 var mainLoop = true
 
 fun main(){
-
+    game.intro()
     game.player = game.createPlayer()
 
     while(mainLoop) {
@@ -32,6 +36,6 @@ fun main(){
     }
 }
 
-//TODO: Mittwoch: game.Intro, Tutorial, UI verbessern, Gameplay(Items, Gegner etc.)
-//     Donnerstag: Mehr Attribute, Präsentation
+//TODO: Mittwoch: Tutorial, Items(Heiltränke) / spezialfähigkeiten , player.turn() -> heiltränke / spezialfähigkeiten benutzen, Mehr Attribute,
+//     Donnerstag: Code checken & beschriften, Präsentation
 
