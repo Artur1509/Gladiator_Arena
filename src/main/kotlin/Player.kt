@@ -13,6 +13,8 @@ class Player(name: String, endurance: Int, strength: Int) : GameChar(name, endur
     var armor: Item? = null
     var weapon: Item? = null
 
+    override var attackList = mutableListOf<String>("hieb", "schnitt", "stich", "heilung")
+
     // Spieler Zug
     override fun turn(): String{
         repeat(20){
@@ -23,20 +25,58 @@ class Player(name: String, endurance: Int, strength: Int) : GameChar(name, endur
             |1. Hieb
             |2. Schnitt
             |3. Stich
+            |4. Heilen
         """.trimMargin())
 
         var input: Int
+
             try{
                 input = readln().toInt()
-                if (input < 1 || input > 3){
-                    throw Exception("Ungültige Eingabe: Wähle eine Option (1-3)")
+                if (input < 1 || input > 4){
+                    throw Exception("Ungültige Eingabe: Wähle eine Option (1-4)")
+                }
+                // Spieler Heilung
+                if (input == 4){
+                    do{
+
+                        val potions = this.inventory.filterIsInstance<Heiltrank>().toMutableList()
+
+                        if(potions.size == 0){
+                            println()
+                            println("Du hast keine Heiltränke.")
+                            break
+                        }
+                        else{
+                            println("Tränke:")
+                            for(potion in potions){
+                                println("${potions.indexOf(potion) + 1} ${potion.name} +${potion.value} HP Regeneration")
+                            }
+                        }
+                        println()
+                        println("Auswahl: (1 - ${potions.size})")
+
+                        val input1 = readln().toInt()
+
+                        try{
+                            potions[input1 - 1].equipItem(this)
+                            break
+
+                        }catch(ex: Exception){
+                            println("Ungültige Eingabe, versuche es nochmal.")
+                            println("Drücke 'Enter' um fortzufahren.")
+                            readln()
+
+                        }
+
+                    }while(true)
+
                 }
             }catch(ex: Exception){
                 println(ex.message)
                 input = readln().toInt()
             }
 
-
+        // Spieler Angriff
         return this.attackList[input - 1]
 
     }

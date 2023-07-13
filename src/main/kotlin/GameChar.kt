@@ -4,7 +4,7 @@ open class GameChar(var name: String, var endurance: Int, var strength: Int) {
     // Gladiator Attribute
     var health: Int = this.endurance * 10
     var damage = 1..(this.strength)
-    var attackList = mutableListOf<String>("hieb", "schnitt", "stich")
+    open var attackList = mutableListOf<String>("hieb", "schnitt", "stich")
 
     // Computer Zug
     open fun turn(): String{

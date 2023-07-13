@@ -1,8 +1,11 @@
 open class Item(var name: String, var price: Int, var value: Int) {
 
+    // Item Arten
     open var isArmor = false
     open var isWeapon = false
+    open var isPotion = false
 
+    // Item Ausrüsten / Benutzen funktion
     open fun equipItem(player: Player){
         if(this.isArmor){
             if(player.armor != null){
@@ -24,6 +27,7 @@ open class Item(var name: String, var price: Int, var value: Int) {
         }
     }
 
+    // Item kaufen Funktion
     fun buyItem(player: Player){
         if(player.gold >= this.price){
             player.inventory.add(this)
@@ -34,13 +38,18 @@ open class Item(var name: String, var price: Int, var value: Int) {
         }
     }
 
+    // Art des Attributes was bei Item erhöht wird, wenn man es anlegt (Sichtbar im Shop / Inventar)
     fun attributeBonus(): String{
         var bonusFor = ""
+
         if (this.isArmor){
             bonusFor = "HP"
         }
         if(this.isWeapon){
             bonusFor = "DMG"
+        }
+        if(this.isPotion){
+            bonusFor = "HP Regeneration"
         }
         return bonusFor
     }

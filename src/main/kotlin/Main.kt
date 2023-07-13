@@ -34,8 +34,8 @@ fun main(){
     while(mainLoop) {
         menu()
     }
-}
 
-//TODO: Mittwoch: Tutorial, Items(Heiltränke) / spezialfähigkeiten , player.turn() -> heiltränke / spezialfähigkeiten benutzen, Mehr Attribute,
-//     Donnerstag: Code checken & beschriften, Präsentation
+    println()
+    println("Danke das du Gladiator Arena gespielt hast, bis zum nächsten mal.")
+}
 

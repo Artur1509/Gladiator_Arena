@@ -79,7 +79,7 @@ class Game {
                         println()
                     }
 
-                    println("Stärke: (${this.skillPoints} Punkte übrig")
+                    println("Stärke: (${this.skillPoints} Punkte übrig)")
                     println()
                     println("Nenne die Anzahl der Punkte die du vergeben möchtest und drücke 'Enter' um zu bestätigen.")
                     try {
@@ -126,10 +126,6 @@ class Game {
     // Kämpfen
     fun fight(enemy: GameChar){
 
-        // Lebenspunkte Spieler & Gegner im Kampf
-        var playerHealth = this.player!!.health
-        var enemyHealth = this.levels.first().health
-
         repeat(20){
             println()
         }
@@ -170,51 +166,55 @@ class Game {
             }
             //Schnitt(Stein) schlägt Hieb(Schere)
             if(playerTurn == "hieb" && enemyTurn == "schnitt"){
-                playerHealth -= enemyDamage
+                this.player!!.health -= enemyDamage
                 println("${enemy.name} trifft dich mit '$enemyTurn' und verursacht $enemyDamage Schaden.")
             }
             if(playerTurn == "schnitt" && enemyTurn == "hieb"){
-                enemyHealth -= playerDamage
+                this.levels.first().health -= playerDamage
                 println("Du triffst ${enemy.name} mit '$playerTurn' und verursachst $playerDamage Schaden.")
             }
             //Hieb(Schere) schlägt Stich(Papier)
             if(playerTurn == "hieb" && enemyTurn == "stich"){
-                enemyHealth -= playerDamage
+                this.levels.first().health -= playerDamage
                 println("Du triffst ${enemy.name} mit '$playerTurn' und verursachst $playerDamage Schaden.")
             }
             if(playerTurn == "stich" && enemyTurn == "hieb"){
-                playerHealth -= enemyDamage
+                this.player!!.health -= enemyDamage
                 println("${enemy.name} trifft dich mit '$enemyTurn' und verursacht $enemyDamage Schaden.")
             }
             //Stich(Papier) schlägt Schnitt(Stein)
             if(playerTurn == "stich" && enemyTurn == "schnitt"){
-                enemyHealth -= playerDamage
+                this.levels.first().health -= playerDamage
                 println("Du triffst ${enemy.name} mit '$playerTurn' und verursachst $playerDamage Schaden.")
             }
             if(playerTurn == "schnitt" && enemyTurn == "stich"){
-                playerHealth -= enemyDamage
+                this.player!!.health -= enemyDamage
                 println("${enemy.name} trifft dich mit '$enemyTurn' und verursacht $enemyDamage Schaden.")
+            }
+            if(playerTurn == "heilung"){
+                println("${enemy.name} trifft mit $enemyTurn und verursacht $enemyDamage schaden.")
+                this.player!!.health -= enemyDamage
             }
 
             // Lebenspunkte auf 0 stellen wenn diese kleiner sind als 0
-            if(enemyHealth < 0){
-                enemyHealth = 0
+            if(this.levels.first().health < 0){
+                this.levels.first().health = 0
             }
-            if(playerHealth < 0){
-                playerHealth = 0
+            if(this.player!!.health < 0){
+                this.player!!.health = 0
             }
 
             // Anzeige der Lebenspunkte des Spielers & Gegners
-            println("${this.player!!.name} HP: $playerHealth     |     ${enemy.name} HP: $enemyHealth")
+            println("${this.player!!.name} HP: ${this.player!!.health}  |     ${enemy.name} HP: ${this.levels.first().health}")
             println()
             println("Drücke 'Enter' um fortzufahren.")
             readln()
 
             // Schleife unterbrechen
-            if(playerHealth <= 0){
+            if(this.player!!.health <= 0){
                 break
             }
-            if(enemyHealth <= 0){
+            if(this.levels.first().health <= 0){
                 break
             }
 
@@ -222,7 +222,7 @@ class Game {
         }while(true)
 
         // Ergebnis des Kampfes
-        if(playerHealth <= 0 && enemyHealth <= 0){
+        if(this.player!!.health <= 0 && this.levels.first().health <= 0){
             repeat(20){
                 println()
             }
@@ -230,7 +230,7 @@ class Game {
             println("Unentschieden!")
         }
 
-        else if(playerHealth <= 0){
+        else if(this.player!!.health <= 0){
             repeat(20){
                 println()
             }
@@ -249,6 +249,15 @@ class Game {
             println("Skillpunkte: +1 | Gold: +25")
             this.player!!.skillPoints++
             this.player!!.gold += 25
+
+            // Lebenspunkte des Spielers werden wieder zurückgesetzt.
+            if(this.player!!.armor?.value != null){
+                this.player!!.health = this.player!!.endurance * 10 + this.player!!.armor!!.value
+            }
+            else{
+                this.player!!.health = this.player!!.endurance * 10
+            }
+
             this.levels.remove(enemy)
             this.playerWins++
             println("Drücke 'Enter' um fortzufahren.")
@@ -277,7 +286,9 @@ class Game {
                 Weapon("Einfaches Langschwert", 50, 5),
                 Armor("Verbesserte Lederrüstung", 50, 8),
                 Weapon("Germanisches Langschwert", 150, 8),
-                Armor("Plattenrüstung", 150, 16 )
+                Armor("Plattenrüstung", 150, 16 ),
+                Heiltrank("Schwacher Heiltrank", 25, 25),
+                Heiltrank("Starker Heiltrank", 60, 50)
             )
 
             repeat(20){
@@ -302,14 +313,14 @@ class Game {
                 """
             Auswahl:
             (1 - ${shopItems.size}) Item kaufen
-            (${shopItems.size + 2}) Zurück
+            (${shopItems.size + 1}) Zurück
         """.trimIndent()
             )
 
             val input = readln().toInt()
 
             when (input) {
-                shopItems.size + 2 -> break
+                shopItems.size + 1 -> break
 
                 else -> {
                     try{
