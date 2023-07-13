@@ -5,8 +5,8 @@ class Game {
         GameChar("Magnus", 4, 4),
         GameChar("Julius", 9, 3 ),
         GameChar("Asterix", 6, 6),
-        GameChar("Obelix", 11, 5),
-        GameChar("Spartacus", 10, 9)
+        GameChar("Obelix", 11, 7),
+        GameChar("Spartacus", 13, 9)
     )
     // Spieler
     var player: Player? = null
@@ -287,8 +287,8 @@ class Game {
                 Armor("Verbesserte Lederrüstung", 50, 8),
                 Weapon("Germanisches Langschwert", 150, 8),
                 Armor("Plattenrüstung", 150, 16 ),
-                Heiltrank("Schwacher Heiltrank", 25, 25),
-                Heiltrank("Starker Heiltrank", 60, 50)
+                Heiltrank("Schwacher Heiltrank", 30, 20),
+                Heiltrank("Starker Heiltrank", 60, 40)
             )
 
             repeat(20){
@@ -352,6 +352,68 @@ class Game {
         println("Trainer: Starten wir mit der erstellung deines Kämpfers...")
         println()
         Thread.sleep(2000)
+    }
+
+    //Game Tutorial
+    fun tutorial(){
+        repeat(20){
+            println("")
+        }
+        println("Trainer: Willkommen im Tutorial ${this.player!!.name}!")
+        Thread.sleep(1500)
+        println()
+
+        println("Trainer: Ich werde dir nun die Grundlagen zeigen, damit du dich zurecht findest und in der Arena überlebst...")
+        Thread.sleep(1500)
+        println()
+
+        println("Trainer: Zuerst ein paar allgemeine Dinge die du tun kannst bevor es für dich in den Kampf geht:")
+        Thread.sleep(1500)
+        println()
+
+        println("- Wenn du Skillpunkte erhälst kannst du unter dem Menüpunkt '2. Trainieren' deine Attribute verbessern.")
+        Thread.sleep(1500)
+        println()
+
+        println("- Wenn du detaillierte Informationen zu deinen Attributen haben möchtest, dann wähle '3. Attribute' im Menü.")
+        Thread.sleep(1500)
+        println()
+
+        println("- Unter dem Menüpunkt '5. Händler' kannst du Waffen, Rüstungen und Heiltränke kaufen.")
+        Thread.sleep(1500)
+        println()
+
+        println("- Im Inventar kannst du deine gekauften Gegenstände einsehen und diese Ausrüsten um deine Kampfwerte zu steigern.")
+        println("Wenn du Heiltränke kaufst, reicht es wenn diese in deinem Inventar liegen um Sie später während des Kampfes zu benutzen.")
+        Thread.sleep(1500)
+        println()
+
+        println("- Wenn du kämpfen möchtest dann wähle den Menüpunkt '1. Kämpfen aus' um in die Arena zu gelangen.")
+        Thread.sleep(1500)
+        println()
+
+        println()
+        println("Trainer: Nun lass mich dir das Kampfsystem erklären: ")
+        Thread.sleep(1500)
+        println("- Der Kampf funktioniert nach dem 'Schere-Stein-Papier Prinzip'...")
+        println()
+        Thread.sleep(1500)
+        println("- Schnitt schlägt Hieb --  Hieb schlägt Stich --- Stich schlägt Schnitt")
+        Thread.sleep(1500)
+        println()
+        println("- Wenn du den mit deinem Angriff den Gegner ausspielst, erleidet dein Gegner schaden und umgekehrt genauso.")
+        println()
+        Thread.sleep(1500)
+        println("- Wenn du versuchst dich während des Kampfes zu heilen, bist du in dem Moment nicht geschützt und erleidest Schaden durch deinen Gegner.")
+        Thread.sleep(1500)
+        println()
+        println()
+        println("Trainer: Das wars auch schon, jetzt weißt du alles worauf es in der Gladiatoren Arena ankommt, viel Glück.")
+        println()
+        println("Drücke 'Enter' um fortzufahren.")
+        readln()
+
+
     }
 
 }

@@ -1,5 +1,5 @@
 fun menu(){
-    val menu = listOf<String>("1. Kämpfen", "2. Trainieren", "3. Attribute", "4. Tutorial", "5. Shop", "6. Inventar", "7. Spiel beenden")
+    val menu = listOf<String>("1. Kämpfen", "2. Trainieren", "3. Attribute", "4. Tutorial", "5. Händler", "6. Inventar", "7. Spiel beenden")
 
     repeat(20){
         println()
@@ -15,7 +15,7 @@ fun menu(){
         "1" -> game.fight(game.levels.first())
         "2" -> game.player!!.training()
         "3" -> game.showStats()
-        "4" -> println("tutorial")
+        "4" -> game.tutorial()
         "5" -> game.shop(game.player!!)
         "6" -> game.player!!.showInventory()
         "7" -> mainLoop = false
